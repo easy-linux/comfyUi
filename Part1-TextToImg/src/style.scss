@@ -1,0 +1,69 @@
+:root {
+  --borderRadius: 8px;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  margin: 20px;
+}
+
+.container {
+  margin: 10px;
+  border: 1px solid #ccc;
+  border-radius: var(--borderRadius);
+  padding: 10px;
+}
+.content{
+  display: flex;
+  justify-content: center;
+}
+
+.tabs{
+  display: flex;
+  margin-bottom: 10px;
+}
+.tab-button{
+  padding: 10px 20px;
+  margin-right: 5px;
+  border: none;
+  background-color: lightgray;
+  cursor: pointer;
+  border-radius: var(--borderRadius);
+
+  &.active {
+    background-color: steelblue;
+    color:white;
+  }
+}
+
+form {
+  border: 1px solod #ddd;
+  padding: 20px;
+  max-width: 300px;
+  background-color: #f9f9f9;
+  border-radius: var(--borderRadius);
+}
+
+.form-container{
+  display: flex;
+  justify-content: center;
+}
+
+label{
+  display: grid;
+  gap: 5px;
+  margin: 5px 0;
+}
+
+.buttons-row{
+  display: flex;
+  gap: 5px;
+  margin: 5px 0;
+  justify-content: flex-end;
+}
+
+.grid-3{
+  display: grid;
+  grid-template-columns: auto auto auto;
+  gap: 5px;
+}
