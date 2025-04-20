@@ -1,0 +1,136 @@
+:root {
+  --borderRadius: 8px;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  margin: 20px;
+  min-width: 1070px;
+}
+
+.container {
+  margin: 10px;
+  border: 1px solid #ccc;
+  border-radius: var(--borderRadius);
+  padding: 10px;
+}
+.content{
+  display: flex;
+  justify-content: center;
+}
+
+.tabs{
+  display: flex;
+  margin-bottom: 10px;
+}
+.tab-button{
+  padding: 10px 20px;
+  margin-right: 5px;
+  border: none;
+  background-color: lightgray;
+  cursor: pointer;
+  border-radius: var(--borderRadius);
+
+  &.active {
+    background-color: steelblue;
+    color:white;
+  }
+}
+
+form {
+  border: 1px solod #ddd;
+  padding: 20px;
+  max-width: 300px;
+  background-color: #f9f9f9;
+  border-radius: var(--borderRadius);
+}
+
+.form-container{
+  display: flex;
+  justify-content: center;
+}
+
+label{
+  display: grid;
+  gap: 5px;
+  margin: 5px 0;
+}
+
+.buttons-row{
+  display: flex;
+  gap: 5px;
+  margin: 5px 0;
+  justify-content: flex-end;
+}
+
+.grid-3{
+  display: grid;
+  grid-template-columns: auto auto auto;
+  gap: 5px;
+}
+
+.grid-4{
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  gap: 5px;
+}
+
+form {
+  .inpaint-image{
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      .icon{
+          cursor: pointer;
+      }
+  }
+  .input-img {
+      max-width: 300px;
+  }
+
+  .input-file {
+      opacity: 0;
+      width: 1px;
+      height: 1px;
+      position: absolute;
+  }
+}
+
+#inpaint, #refine {
+  max-width: unset;
+  width: 400px;
+  .input-img{
+      width: 400px;
+      display: inline;
+  }
+  .inpaint-block{
+      position: relative;
+  }
+
+  #canvasContainer {
+      position: relative;
+      display: block;
+      min-height: 400px;
+  }
+
+  canvas {
+      border: 2px solid #4a90e2;
+  }
+
+  #imageCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+  }
+
+  #maskCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.3;
+  }
+}

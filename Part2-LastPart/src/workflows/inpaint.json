@@ -1,0 +1,302 @@
+{
+    "prompt": {
+        "1": {
+            "class_type": "CheckpointLoaderSimple",
+            "inputs": {
+                "ckpt_name": "serenity_v21Safetensors.safetensors"
+            }
+        },
+        "2": {
+            "class_type": "DifferentialDiffusion",
+            "inputs": {
+                "model": [
+                    "1",
+                    0
+                ]
+            }
+        },
+        "3": {
+            "class_type": "ETN_LoadImageBase64",
+            "inputs": {
+                "image": "",
+            }
+        },
+        "4": {
+            "class_type": "ETN_LoadMaskBase64",
+            "inputs": {
+                "mask": ""
+            }
+        },
+        "5": {
+            "class_type": "INPAINT_ExpandMask",
+            "inputs": {
+                "mask": [
+                    "4",
+                    0
+                ],
+                "grow": 9,
+                "blur": 9
+            }
+        },
+        "6": {
+            "class_type": "CropMask",
+            "inputs": {
+                "mask": [
+                    "5",
+                    0
+                ],
+                "x": 132,
+                "y": 164,
+                "width": 208,
+                "height": 184
+            }
+        },
+        "7": {
+            "class_type": "INPAINT_MaskedBlur",
+            "inputs": {
+                "image": [
+                    "3",
+                    0
+                ],
+                "mask": [
+                    "5",
+                    0
+                ],
+                "blur": 65,
+                "falloff": 9
+            }
+        },
+        "8": {
+            "class_type": "CLIPTextEncode",
+            "inputs": {
+                "clip": [
+                    "1",
+                    1
+                ],
+                "text": "cinematic photo of bullet hole, photograph, film, best quality, highres"
+            }
+        },
+        "9": {
+            "class_type": "CLIPTextEncode",
+            "inputs": {
+                "clip": [
+                    "1",
+                    1
+                ],
+                "text": "drawing, painting, sketch, bad quality, low resolution, blurry"
+            }
+        },
+        "10": {
+            "class_type": "InpaintPreprocessor",
+            "inputs": {
+                "image": [
+                    "3",
+                    0
+                ],
+                "mask": [
+                    "5",
+                    0
+                ]
+            }
+        },
+        "11": {
+            "class_type": "ControlNetLoader",
+            "inputs": {
+                "control_net_name": "control_v11p_sd15_inpaint_fp16.safetensors"
+            }
+        },
+        "12": {
+            "class_type": "ControlNetApplyAdvanced",
+            "inputs": {
+                "positive": [
+                    "8",
+                    0
+                ],
+                "negative": [
+                    "9",
+                    0
+                ],
+                "control_net": [
+                    "11",
+                    0
+                ],
+                "image": [
+                    "10",
+                    0
+                ],
+                "vae": [
+                    "1",
+                    2
+                ],
+                "strength": 1.0,
+                "start_percent": 0.0,
+                "end_percent": 1.0
+            }
+        },
+        "13": {
+            "class_type": "VAEEncode",
+            "inputs": {
+                "vae": [
+                    "1",
+                    2
+                ],
+                "pixels": [
+                    "7",
+                    0
+                ]
+            }
+        },
+        "14": {
+            "class_type": "SetLatentNoiseMask",
+            "inputs": {
+                "samples": [
+                    "13",
+                    0
+                ],
+                "mask": [
+                    "5",
+                    0
+                ]
+            }
+        },
+        "15": {
+            "class_type": "RepeatLatentBatch",
+            "inputs": {
+                "samples": [
+                    "14",
+                    0
+                ],
+                "amount": 5
+            }
+        },
+        "16": {
+            "class_type": "CFGGuider",
+            "inputs": {
+                "model": [
+                    "2",
+                    0
+                ],
+                "positive": [
+                    "12",
+                    0
+                ],
+                "negative": [
+                    "12",
+                    1
+                ],
+                "cfg": 7.0
+            }
+        },
+        "17": {
+            "class_type": "BasicScheduler",
+            "inputs": {
+                "model": [
+                    "2",
+                    0
+                ],
+                "scheduler": "karras",
+                "steps": 20,
+                "denoise": 1.0
+            }
+        },
+        "18": {
+            "class_type": "RandomNoise",
+            "inputs": {
+                "noise_seed": 1291936941
+            }
+        },
+        "19": {
+            "class_type": "KSamplerSelect",
+            "inputs": {
+                "sampler_name": "dpmpp_2m"
+            }
+        },
+        "20": {
+            "class_type": "SamplerCustomAdvanced",
+            "inputs": {
+                "noise": [
+                    "18",
+                    0
+                ],
+                "guider": [
+                    "16",
+                    0
+                ],
+                "sampler": [
+                    "19",
+                    0
+                ],
+                "sigmas": [
+                    "17",
+                    0
+                ],
+                "latent_image": [
+                    "15",
+                    0
+                ]
+            }
+        },
+        "21": {
+            "class_type": "VAEDecode",
+            "inputs": {
+                "vae": [
+                    "1",
+                    2
+                ],
+                "samples": [
+                    "20",
+                    1
+                ]
+            }
+        },
+        "22": {
+            "class_type": "ImageCrop",
+            "inputs": {
+                "image": [
+                    "21",
+                    0
+                ],
+                "x": 132,
+                "y": 164,
+                "width": 208,
+                "height": 184
+            }
+        },
+        "23": {
+            "class_type": "INPAINT_DenoiseToCompositingMask",
+            "inputs": {
+                "mask": [
+                    "6",
+                    0
+                ],
+                "offset": 0.05,
+                "threshold": 0.35
+            }
+        },
+        "24": {
+            "class_type": "ETN_ApplyMaskToImage",
+            "inputs": {
+                "image": [
+                    "22",
+                    0
+                ],
+                "mask": [
+                    "23",
+                    0
+                ]
+            }
+        },
+        "25": {
+            "class_type": "ETN_SendImageWebSocket",
+            "inputs": {
+                "images": [
+                    "24",
+                    0
+                ],
+                "format": "PNG"
+            }
+        }
+    },
+    "client_id": "2e64bc49-abf2-4cb4-8106-4998beda1614",
+    "front": false
+}

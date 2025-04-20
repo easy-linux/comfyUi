@@ -1,0 +1,224 @@
+{
+    "prompt": {
+        "1": {
+            "class_type": "CheckpointLoaderSimple",
+            "inputs": {
+                "ckpt_name": "Deliberate_v6.safetensors"
+            }
+        },
+        "2": {
+            "class_type": "DifferentialDiffusion",
+            "inputs": {
+                "model": [
+                    "1",
+                    0
+                ]
+            }
+        },
+        "3": {
+            "class_type": "CLIPTextEncode",
+            "inputs": {
+                "clip": [
+                    "1",
+                    1
+                ],
+                "text": "cinematic photo of a ball, photograph, film, best quality, highres"
+            }
+        },
+        "4": {
+            "class_type": "CLIPTextEncode",
+            "inputs": {
+                "clip": [
+                    "1",
+                    1
+                ],
+                "text": "drawing, painting, sketch, bad quality, low resolution, blurry"
+            }
+        },
+        "5": {
+            "class_type": "ETN_LoadImageBase64",
+            "inputs": {
+                "image": ""
+            }
+        },
+        "6": {
+            "class_type": "ETN_LoadMaskBase64",
+            "inputs": {
+                "mask": ""
+            }
+        },
+        "7": {
+            "class_type": "INPAINT_ExpandMask",
+            "inputs": {
+                "mask": [
+                    "6",
+                    0
+                ],
+                "grow": 22,
+                "blur": 22
+            }
+        },
+        "8": {
+            "class_type": "VAEEncode",
+            "inputs": {
+                "vae": [
+                    "1",
+                    2
+                ],
+                "pixels": [
+                    "5",
+                    0
+                ]
+            }
+        },
+        "9": {
+            "class_type": "SetLatentNoiseMask",
+            "inputs": {
+                "samples": [
+                    "8",
+                    0
+                ],
+                "mask": [
+                    "7",
+                    0
+                ]
+            }
+        },
+        "10": {
+            "class_type": "RepeatLatentBatch",
+            "inputs": {
+                "samples": [
+                    "9",
+                    0
+                ],
+                "amount": 4
+            }
+        },
+        "11": {
+            "class_type": "CFGGuider",
+            "inputs": {
+                "model": [
+                    "2",
+                    0
+                ],
+                "positive": [
+                    "3",
+                    0
+                ],
+                "negative": [
+                    "4",
+                    0
+                ],
+                "cfg": 6.0
+            }
+        },
+        "12": {
+            "class_type": "BasicScheduler",
+            "inputs": {
+                "model": [
+                    "2",
+                    0
+                ],
+                "scheduler": "normal",
+                "steps": 20,
+                "denoise": 1.0
+            }
+        },
+        "13": {
+            "class_type": "SplitSigmas",
+            "inputs": {
+                "sigmas": [
+                    "12",
+                    0
+                ],
+                "step": 12
+            }
+        },
+        "14": {
+            "class_type": "RandomNoise",
+            "inputs": {
+                "noise_seed": 439847268
+            }
+        },
+        "15": {
+            "class_type": "KSamplerSelect",
+            "inputs": {
+                "sampler_name": "euler_ancestral"
+            }
+        },
+        "16": {
+            "class_type": "SamplerCustomAdvanced",
+            "inputs": {
+                "noise": [
+                    "14",
+                    0
+                ],
+                "guider": [
+                    "11",
+                    0
+                ],
+                "sampler": [
+                    "15",
+                    0
+                ],
+                "sigmas": [
+                    "13",
+                    1
+                ],
+                "latent_image": [
+                    "10",
+                    0
+                ]
+            }
+        },
+        "17": {
+            "class_type": "VAEDecode",
+            "inputs": {
+                "vae": [
+                    "1",
+                    2
+                ],
+                "samples": [
+                    "16",
+                    1
+                ]
+            }
+        },
+        "18": {
+            "class_type": "INPAINT_DenoiseToCompositingMask",
+            "inputs": {
+                "mask": [
+                    "7",
+                    0
+                ],
+                "offset": 0.05,
+                "threshold": 0.35
+            }
+        },
+        "19": {
+            "class_type": "ETN_ApplyMaskToImage",
+            "inputs": {
+                "image": [
+                    "17",
+                    0
+                ],
+                "mask": [
+                    "18",
+                    0
+                ]
+            }
+        },
+        "20": {
+            "class_type": "ETN_SendImageWebSocket",
+            "inputs": {
+                "images": [
+                    "19",
+                    0
+                ],
+                "format": "PNG"
+            }
+        }
+    },
+    "client_id": "adcbfbe5-02f0-4a9a-89c3-7e855397167c",
+    "front": false
+}
